@@ -3,13 +3,31 @@ import numpy as np
 import pandas as pd
 from feedback_analysis import feedback_analysis as fa
 import feedback_analysis.create_data as create_data
+import os
 
 
 class TestRead(unittest.TestCase):
 
+    @classmethod
+    def setUpClass(cls):
+        d = dict(message=["Nie", "ma", "wody", "na"],
+                 airline_code=[1, 2, 2, 1],
+                 number_of_fellow_passengers=[2, 1, 1, 0],
+                 did_receive_compensation=[False, np.NaN, True, False],
+                 total_compensation_amount=[np.NaN, 2000, 500, 0])
+        create_data.serialize_tojson(pd.DataFrame(d), "feedback_analysis/missing_values.json")
+
+    @classmethod
+    def tearDownClass(cls):
+        os.remove("feedback_analysis/missing_values.json")
+
     def test_read_file(self):
         with self.assertRaises(ValueError):
             fa.read_file("data.pdf")
+
+    def test_missing_values(self):
+        with self.assertRaises(AssertionError):
+            fa.read_file("feedback_analysis/missing_values.json")
 
 
 class TestAnalysis(unittest.TestCase):
@@ -19,11 +37,11 @@ class TestAnalysis(unittest.TestCase):
                  airline_code=[1, 2, 2, 1],
                  number_of_fellow_passengers=[2, 1, 1, 0],
                  did_receive_compensation=[False, True, True, False],
-                 total_compensation_amount=[np.NaN, 2000, 500, np.NaN])
+                 total_compensation_amount=[0, 2000, 500, 0])
         self.data = pd.DataFrame(d)
 
     def test_extract_messages(self):
-        result1 = self.data['message'].values.tolist()
+        result1 = self.data["message"].values.tolist()
         result2 = fa.extract_messages(self.data).values.tolist()
         self.assertEqual(result1, result2)
 
@@ -45,10 +63,15 @@ class TestSameJsonCsv(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         data = create_data.generate_random_data(10)
-        create_data.serialize_tocsv(data, 'feedback_analysis/data.csv')
-        create_data.serialize_tojson(data, 'feedback_analysis/data.json')
-        cls.data_json = fa.read_file('feedback_analysis/data.json')
-        cls.data_csv = fa.read_file('feedback_analysis/data.csv')
+        create_data.serialize_tocsv(data, "feedback_analysis/data.csv")
+        create_data.serialize_tojson(data, "feedback_analysis/data.json")
+        cls.data_json = fa.read_file("feedback_analysis/data.json")
+        cls.data_csv = fa.read_file("feedback_analysis/data.csv")
+
+    @classmethod
+    def tearDownClass(cls):
+        os.remove("feedback_analysis/data.json")
+        os.remove("feedback_analysis/data.csv")
 
     def test_same_average_compensation_per_passenger(self):
         result_json = fa.calculate_average_compensation_per_passenger(self.data_json)
@@ -66,6 +89,6 @@ class TestSameJsonCsv(unittest.TestCase):
         self.assertEqual(result_csv, result_json)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
 
