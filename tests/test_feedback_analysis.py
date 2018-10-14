@@ -1,7 +1,7 @@
 import unittest
 import numpy as np
 import pandas as pd
-import feedback_analysis as fa
+from feedback_analysis import feedback_analysis as fa
 
 
 class TestRead(unittest.TestCase):
