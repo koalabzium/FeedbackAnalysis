@@ -1,0 +1,11 @@
+,message,airline_code,number_of_fellow_passengers,did_receive_compensation,total_compensation_amount
+0,"Hi, I am the feedback message",5,1,0,
+1,"Hi, I am the feedback message",2,0,1,8934.0
+2,"Hi, I am the feedback message",2,17,1,1547.0
+3,"Hi, I am the feedback message",2,13,0,
+4,"Hi, I am the feedback message",3,12,1,2785.0
+5,"Hi, I am the feedback message",1,0,1,3093.0
+6,"Hi, I am the feedback message",4,2,0,
+7,"Hi, I am the feedback message",3,4,1,3562.0
+8,"Hi, I am the feedback message",0,0,1,8385.0
+9,"Hi, I am the feedback message",5,6,0,
