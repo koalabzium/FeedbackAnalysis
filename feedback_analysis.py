@@ -2,19 +2,18 @@ import pandas as pd
 import matplotlib as plt
 import numpy as np
 import engarde.decorators as ed
+import engarde.checks as ec
 
-#ZMIEŃ NAZWY FUNKCJI NA CZASOWNIKI ZOFIA XD
-#OGARNIJ JSONA...
-#WYŚLIJ
 
-# @ed.is_shape((-1, 5))
 @ed.has_dtypes(items=dict(number_of_fellow_passengers=int, did_receive_compensation=int))
 def read_file(file_path):
 
     if file_path.lower().endswith(".json"):
         feedback = pd.read_json(file_path)
+        ec.is_shape(feedback, (-1,5))
     elif file_path.lower().endswith(".csv"):
         feedback = pd.read_csv(file_path)
+        ec.is_shape(feedback, (-1,6))
     else:
         raise ValueError("This file format is not supported yet.")
     return feedback
