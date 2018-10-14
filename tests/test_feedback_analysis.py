@@ -22,6 +22,11 @@ class TestAnalysis(unittest.TestCase):
                  total_compensation_amount=[np.NaN, 2000, 500, np.NaN])
         self.data = pd.DataFrame(d)
 
+    def test_extract_messages(self):
+        result1 = self.data['message'].values.tolist()
+        result2 = fa.extract_messages(self.data).values.tolist()
+        self.assertEqual(result1, result2)
+
     def test_average_compensation_per_passenger(self):
         result = fa.calculate_average_compensation_per_passenger(self.data)
         self.assertEqual(625, result)
