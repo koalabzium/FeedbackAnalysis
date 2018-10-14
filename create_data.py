@@ -23,5 +23,5 @@ def generate_random_data(passenger_amount):
     return data
 
 
-serialize_tojson(generate_random_data(20), 'data.json')
+serialize_tojson(generate_random_data(10), 'data.json')
 serialize_tocsv(generate_random_data(10), 'data.csv')
